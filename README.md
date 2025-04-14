@@ -5,5 +5,13 @@
 - Create Workout Prompts for DeepSeek R1.
 - Convert DeepSeek R1's Response into JSON Format to be Serverd Back to the Client.
 - Store User Info on the Server if User is Logged In.
-- The Mobile App should be at least Partially Operable without Internet.
-- Server Sync should be Automatically performed if Internet is Available and the User has already logged in before (Using JWT Token in LocalStorage).
+- Server Sync
+![image](https://github.com/user-attachments/assets/28d3f1e1-91b2-4a1d-843c-3d9373307510)
+
+## Non Functional Requirements:
+- Low Server - Client Latency
+- Low Server - AI Latency
+- UI Elements to Provide Ease of Use to the User - such as Manually Tracking the Current Workout
+- JSON Data Conversion should be correct and predefined JSON Structure should be provided as a prompt to the GenAI (Deepseek R1)
+- The Mobile App should be at least Partially Operable without Internet Connectivity (for Workout Tracking)
+- The Syncing with Server Function should automatically be performed based on the Local Storage Token (JWT)
