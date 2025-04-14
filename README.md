@@ -1,4 +1,7 @@
 # AI Assisted Workout Planning App
+
+![image](https://github.com/user-attachments/assets/28d3f1e1-91b2-4a1d-843c-3d9373307510)
+
 ## Functional Requirements:
 - Create Workout Plans on the Client's Request.
 - Manage Workout Plans according to Progress / Experience.
@@ -6,7 +9,6 @@
 - Convert DeepSeek R1's Response into JSON Format to be Serverd Back to the Client.
 - Store User Info on the Server if User is Logged In.
 - Server Sync
-![image](https://github.com/user-attachments/assets/28d3f1e1-91b2-4a1d-843c-3d9373307510)
 
 ## Non Functional Requirements:
 - Low Server - Client Latency
