@@ -1,46 +1,53 @@
 from fastapi import FastAPI
-import requests
-import json
+from google import genai
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    try:
-        response = requests.post(
-            url="https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": "Bearer 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",
-                "Content-Type": "application/json",
-            },
-            data=json.dumps({
-                "model": "deepseek/deepseek-r1:free",
-                "messages": [
-                    {
-                        "role": "system", 
-                        "content": "You are a JSON generator."
-                    },
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:8081",
+    "http://127.0.0.1:8081"
+    "http://localhost:19006",
+]
 
-                    {
-                        "role": "user",
-                        "content": "Create a Basic Exercise Plan for a Beginner who does enough Cardio but not enough Weight Training in the JSON Format [{weekDay: String, exercise: [{exerciseName: String, exerciseDescription: String, exerciseSets: number, exerciseReps: String(Reps or Upto Failure)}]}] (Only give me the json no reasoning/introduction required)"
-                    }
-                ],
-                "stream": False,
-                "output_format": "json"
-            })
-        )
-        # Process the response content as JSON
-        response_json = response.json() 
-        message = response_json["choices"][0]["message"]["content"]
-        jsonData = json.loads(message.strip("```json\n"))
-        return {"message": jsonData}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # List of allowed origins
+    allow_credentials=True,  # Allow cookies and authentication headers
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
-    
-    except requests.exceptions.RequestException as e:
-        # Handle HTTP request errors
-        return {"error": f"An error occurred: {str(e)}"}
-    
-    except json.JSONDecodeError:
-        # Handle cases where the response isn't valid JSON
-        return {"error": "The response could not be decoded as JSON"}
+
+class Exercise(BaseModel):
+    exName: str
+    exDesc: str
+    exSets: int
+    exReps: int
+    exWeight: str
+
+class DayPlan(BaseModel):
+    weekDay: str
+    workout: list[Exercise]
+
+
+@app.get("/gemini")
+async def gem():
+    client = genai.Client(api_key="AIzaSyAiRRLUh1RQfm9P7H1ntSNNEm5Z0ksgUhs")
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=(
+            "Generate a Basic Exercise Plan for an Intermediate Gymbro focusing on weight training in strictly valid JSON format. (Weights in KG)"
+        ),
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": list[DayPlan]
+        }
+    )
+
+    # jsonObject = json.loads(response["parsed"])
+
+    return response.parsed
