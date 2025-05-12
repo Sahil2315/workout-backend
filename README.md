@@ -1,4 +1,4 @@
-# AI Assisted Workout Planning App
+# Plankout - An AI Assisted Workout Planning App
 
 ![image](https://github.com/user-attachments/assets/0e713d06-f1a2-4f6e-88ae-156f71260f43)
 
